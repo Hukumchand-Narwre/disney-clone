@@ -8,7 +8,7 @@ import {
   selectUserPhoto,
   setUserLoginDetails,
   setSignOutState,
-} from "../features/users/userSlice";
+} from "../features/user/userSlice";
 
 const Header = (props) => {
   const dispatch = useDispatch();
@@ -20,6 +20,7 @@ const Header = (props) => {
     auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUser(user);
+        history.push("/home");
       }
     });
   }, [userName]);
@@ -34,8 +35,6 @@ const Header = (props) => {
         .catch((error) => {
           alert(error.message);
         });
-
-      history.push("/home");
     } else if (userName) {
       auth
         .signOut()
@@ -48,6 +47,7 @@ const Header = (props) => {
   };
 
   const setUser = (user) => {
+    console.log(user);
     dispatch(
       setUserLoginDetails({
         name: user.displayName,
@@ -56,7 +56,7 @@ const Header = (props) => {
       })
     );
   };
-
+  console.log(userPhoto);
   return (
     <Nav>
       <Logo>
@@ -72,29 +72,29 @@ const Header = (props) => {
               <img src="/Images/home-icon.svg" alt="HOME" />
               <span>HOME</span>
             </a>
-            <a href="/search">
+            <a href="/">
               <img src="/Images/search-icon.svg" alt="SEARCH" />
               <span>SEARCH</span>
             </a>
-            <a href="/watchlist">
+            <a href="/">
               <img src="/Images/watchlist-icon.svg" alt="WATCHLIST" />
               <span>WATCHLIST</span>
             </a>
-            <a href="/originals">
+            <a href="/">
               <img src="/Images/original-icon.svg" alt="ORIGINALS" />
               <span>ORIGINALS</span>
             </a>
-            <a href="/movies">
+            <a href="/">
               <img src="/Images/movie-icon.svg" alt="MOVIES" />
               <span>MOVIES</span>
             </a>
-            <a href="/series">
+            <a href="/">
               <img src="/Images/series-icon.svg" alt="SERIES" />
               <span>SERIES</span>
             </a>
           </NavMenu>
           <SignOut>
-            <UserImg src={userPhoto} alt={userName} />
+            <UserImg src={userPhoto} alt="" />
             <DropDown>
               <span onClick={handleAuth}>Sign out</span>
             </DropDown>
@@ -127,6 +127,7 @@ const Logo = styled.a`
   max-height: 70px;
   font-size: 0;
   display: inline-block;
+
   img {
     display: block;
     width: 100%;
@@ -144,16 +145,19 @@ const NavMenu = styled.div`
   position: relative;
   margin-right: auto;
   margin-left: 25px;
+
   a {
     display: flex;
     align-items: center;
     padding: 0 12px;
+
     img {
       height: 20px;
       min-width: 20px;
       width: 20px;
       z-index: auto;
     }
+
     span {
       color: rgb(249, 249, 249);
       font-size: 13px;
@@ -162,6 +166,7 @@ const NavMenu = styled.div`
       padding: 2px 0px;
       white-space: nowrap;
       position: relative;
+
       &:before {
         background-color: rgb(249, 249, 249);
         border-radius: 0px 0px 4px 4px;
@@ -179,6 +184,7 @@ const NavMenu = styled.div`
         width: auto;
       }
     }
+
     &:hover {
       span:before {
         transform: scaleX(1);
@@ -187,9 +193,10 @@ const NavMenu = styled.div`
       }
     }
   }
-  /* @media (max-width: 768px) {
+
+  @media (max-width: 768px) {
     display: none;
-  } */
+  }
 `;
 
 const Login = styled.a`
@@ -200,6 +207,7 @@ const Login = styled.a`
   border: 1px solid #f9f9f9;
   border-radius: 4px;
   transition: all 0.2s ease 0s;
+
   &:hover {
     background-color: #f9f9f9;
     color: #000;
@@ -234,11 +242,13 @@ const SignOut = styled.div`
   cursor: pointer;
   align-items: center;
   justify-content: center;
+
   ${UserImg} {
     border-radius: 50%;
     width: 100%;
     height: 100%;
   }
+
   &:hover {
     ${DropDown} {
       opacity: 1;
